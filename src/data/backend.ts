@@ -171,14 +171,12 @@ function explain(error: { message: string; code?: string }): Error {
 export class SupabaseBackend implements Backend {
   readonly mode = 'supabase' as const
   private client = supabase!
-  private userId: string | null = null
   private workspaceOwnerId: string | null = null
 
   async getSessionUser(): Promise<SessionUser | null> {
     const { data } = await this.client.auth.getSession()
     const u = data.session?.user
     if (!u) return null
-    this.userId = u.id
     return { id: u.id, email: u.email ?? '' }
   }
 
@@ -204,7 +202,6 @@ export class SupabaseBackend implements Backend {
   onAuthChange(cb: (user: SessionUser | null) => void): () => void {
     const { data } = this.client.auth.onAuthStateChange((_e, session) => {
       const u = session?.user
-      this.userId = u?.id ?? null
       cb(u ? { id: u.id, email: u.email ?? '' } : null)
     })
     return () => data.subscription.unsubscribe()
@@ -227,7 +224,6 @@ export class SupabaseBackend implements Backend {
   }
 
   async loadAll(user: SessionUser): Promise<Db> {
-    this.userId = user.id
     // Each member has their own login; all business rows belong to the owner.
     const membership = await this.client.from('workspace_members')
       .select('owner_id').eq('user_id', user.id).single()
