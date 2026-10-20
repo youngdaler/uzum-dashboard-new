@@ -1,4 +1,6 @@
 import { RotateCcw } from 'lucide-react'
+import BatchCalculator from './calculator-batch'
+import { Segmented } from '@/components/ui/tabs'
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardBody, CardHeader } from '@/components/ui/card'
@@ -99,6 +101,7 @@ export default function CalculatorPage() {
   const [reverseMode, setReverseMode] = useState<ReverseMode>('margin')
   const [reverseTarget, setReverseTarget] = useState(25)
   const [productId, setProductId] = useState('')
+  const [calculatorView, setCalculatorView] = useState<'unit' | 'batch'>('unit')
 
   useEffect(() => {
     try {
@@ -163,6 +166,8 @@ export default function CalculatorPage() {
         }
       />
 
+      <div className="mb-4"><Segmented value={calculatorView} onChange={setCalculatorView} options={[{ value: 'unit', label: 'За единицу' }, { value: 'batch', label: 'За партию' }]} /></div>
+      {calculatorView === 'batch' ? <BatchCalculator /> : <>
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,420px)]">
         <div className="space-y-4">
           <Section title="Закупка">
@@ -376,6 +381,7 @@ export default function CalculatorPage() {
           </CardBody>
         </Card>
       </div>
+      </>}
     </>
   )
 }
