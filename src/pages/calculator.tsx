@@ -16,18 +16,42 @@ import { kgToG, gToKg } from '@/lib/weight'
 const STORAGE = 'uzum-calculator'
 
 function NumField({ label, value, onChange, step, suffix, hint }: { label: string; value: number; onChange: (n: number) => void; step?: string; suffix?: string; hint?: string }) {
+  // Keep the user's text while editing: converting 0. or 0.10 to a number
+  // on every keystroke makes decimal prices impossible to enter naturally.
+  const [draft, setDraft] = useState(() => value === 0 ? '' : String(value))
+  const [focused, setFocused] = useState(false)
+
+  useEffect(() => {
+    if (!focused) setDraft(value === 0 ? '' : String(value))
+  }, [value, focused])
+
+  const change = (raw: string) => {
+    const next = raw.replace(',', '.')
+    if (!/^(?:\d+(?:\.\d*)?|\.\d*)?$/.test(next)) return
+    setDraft(next)
+    if (next === '' || next === '.') {
+      onChange(0)
+    } else {
+      const parsed = Number(next)
+      if (Number.isFinite(parsed)) onChange(parsed)
+    }
+  }
+
   return (
     <div>
       <Label>{label}</Label>
       <div className="relative">
         <Input
-          type="number"
-          inputMode="decimal"
-          step={step ?? 'any'}
-          min={0}
-          value={value === 0 ? '' : value}
+          type="text"
+          inputMode={step === '1' ? 'numeric' : 'decimal'}
+          value={draft}
           placeholder="0"
-          onChange={(e) => onChange(e.target.value === '' ? 0 : Math.max(0, Number(e.target.value)))}
+          onFocus={() => setFocused(true)}
+          onBlur={() => {
+            setFocused(false)
+            setDraft(value === 0 ? '' : String(value))
+          }}
+          onChange={(e) => change(e.target.value)}
           className={suffix ? 'pr-12' : ''}
         />
         {suffix && <span className="pointer-events-none absolute right-3 top-2 text-xs text-muted-foreground">{suffix}</span>}
