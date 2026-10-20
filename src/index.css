@@ -1,0 +1,139 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: #fafafb;
+  --foreground: #14141a;
+  --card: #ffffff;
+  --muted: #f3f3f6;
+  --muted-foreground: #6b6b7a;
+  --border: #e6e6ec;
+  --input: #d9d9e2;
+  --primary: #5b3df5;
+  --primary-hover: #4a2fd9;
+  --primary-foreground: #ffffff;
+  --primary-soft: #efecff;
+  --success: #12805c;
+  --success-soft: #e3f6ee;
+  --danger: #c4314b;
+  --danger-soft: #fdebee;
+  --warning: #a8620a;
+  --warning-soft: #fff3df;
+  --ring: #8e7bff;
+  --chart-1: #5b3df5;
+  --chart-2: #12a37f;
+  --chart-3: #e8963a;
+  --chart-4: #3b82c4;
+  --chart-5: #d1498a;
+  --chart-6: #8a8a99;
+  --chart-grid: #ececf1;
+  color-scheme: light;
+}
+
+.dark {
+  --background: #0e0e13;
+  --foreground: #ededf2;
+  --card: #16161d;
+  --muted: #1e1e27;
+  --muted-foreground: #9a9aab;
+  --border: #272733;
+  --input: #34343f;
+  --primary: #8b78ff;
+  --primary-hover: #a193ff;
+  --primary-foreground: #0e0e13;
+  --primary-soft: #24204a;
+  --success: #3ccf9f;
+  --success-soft: #11332a;
+  --danger: #ff6b83;
+  --danger-soft: #3a1820;
+  --warning: #f0b45c;
+  --warning-soft: #3a2a10;
+  --ring: #8b78ff;
+  --chart-1: #8b78ff;
+  --chart-2: #3ccf9f;
+  --chart-3: #f0b45c;
+  --chart-4: #6aaee8;
+  --chart-5: #ec79ad;
+  --chart-6: #8a8a99;
+  --chart-grid: #26262f;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-soft: var(--primary-soft);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-ring: var(--ring);
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --radius-card: 12px;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: 'tnum' 1, 'cv11' 1;
+}
+
+* {
+  border-color: var(--border);
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Recharts */
+.recharts-cartesian-grid line {
+  stroke: var(--chart-grid);
+}
+.recharts-text {
+  fill: var(--muted-foreground);
+  font-size: 11px;
+}
+.recharts-tooltip-cursor {
+  fill: var(--muted);
+  opacity: 0.5;
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+@media print {
+  aside,
+  header,
+  .no-print {
+    display: none !important;
+  }
+}
